@@ -61,7 +61,8 @@ export function useTodos() {
     text: string,
     priority: Priority = DEFAULT_PRIORITY,
     dueDate?: string,
-    category?: Category
+    category?: Category,
+    location?: string
   ) {
     const trimmed = text.trim();
     if (!trimmed) return;
@@ -73,6 +74,7 @@ export function useTodos() {
       createdAt: Date.now(),
       dueDate: dueDate || undefined,
       category,
+      location: location || undefined,
     };
     setTodos((prev) => [todo, ...prev]);
   }

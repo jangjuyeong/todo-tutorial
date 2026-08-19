@@ -128,6 +128,28 @@ describe("useTodos 카테고리", () => {
   });
 });
 
+describe("useTodos 장소", () => {
+  it("addTodo에 전달한 장소로 추가한다", () => {
+    const { result } = renderHook(() => useTodos());
+
+    act(() => {
+      result.current.addTodo("회의", "medium", undefined, undefined, "회의실 A");
+    });
+
+    expect(result.current.todos[0].location).toBe("회의실 A");
+  });
+
+  it("장소를 생략하면 location 없이 추가한다", () => {
+    const { result } = renderHook(() => useTodos());
+
+    act(() => {
+      result.current.addTodo("청소");
+    });
+
+    expect(result.current.todos[0].location).toBeUndefined();
+  });
+});
+
 describe("useTodos 손상 데이터 보호", () => {
   it("파싱할 수 없는 저장값을 빈 배열로 덮어쓰지 않는다", async () => {
     localStorage.setItem("todos", "{이건 JSON이 아님");

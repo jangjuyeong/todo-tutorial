@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { XIcon } from "@phosphor-icons/react";
+import { MapPinIcon, XIcon } from "@phosphor-icons/react";
 import {
   CATEGORY_META,
   DEFAULT_PRIORITY,
@@ -94,7 +94,14 @@ export function TodoItem({ todo, onToggle, onDelete, onEdit }: TodoItemProps) {
 
       {todo.dueDate && (
         <span className="shrink-0 text-xs text-muted-foreground tabular-nums">
-          {todo.dueDate}
+          {todo.dueDate.replace("T", " ")}
+        </span>
+      )}
+
+      {todo.location && (
+        <span className="flex shrink-0 items-center gap-0.5 text-xs text-muted-foreground">
+          <MapPinIcon />
+          {todo.location}
         </span>
       )}
 

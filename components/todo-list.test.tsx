@@ -21,7 +21,7 @@ async function addTodoWithDue(
   text: string,
   due: string
 ) {
-  fireEvent.change(screen.getByLabelText("마감일"), {
+  fireEvent.change(screen.getByLabelText("마감일시"), {
     target: { value: due },
   });
   const input = screen.getByRole("textbox", { name: "새 할 일" });
@@ -258,9 +258,9 @@ describe("Todo 정렬", () => {
   it("'마감일순' 선택 → 마감일 가까운 항목부터 표시된다", async () => {
     const user = userEvent.setup();
     render(<TodoList />);
-    await addTodoWithDue(user, "먼일", "2026-07-10");
-    await addTodoWithDue(user, "가까운일", "2026-07-01");
-    await addTodoWithDue(user, "중간일", "2026-07-05");
+    await addTodoWithDue(user, "먼일", "2026-07-10T00:00");
+    await addTodoWithDue(user, "가까운일", "2026-07-01T00:00");
+    await addTodoWithDue(user, "중간일", "2026-07-05T00:00");
     await screen.findByText("중간일");
 
     await user.click(screen.getByRole("radio", { name: "마감일순" }));
@@ -274,11 +274,11 @@ describe("Todo 정렬", () => {
   it("'마감일순' 선택 → 마감일 없는 항목 2개는 맨 뒤에 표시된다", async () => {
     const user = userEvent.setup();
     render(<TodoList />);
-    await addTodoWithDue(user, "마감1", "2026-07-03");
+    await addTodoWithDue(user, "마감1", "2026-07-03T00:00");
     await addTodo(user, "없음1");
-    await addTodoWithDue(user, "마감2", "2026-07-01");
+    await addTodoWithDue(user, "마감2", "2026-07-01T00:00");
     await addTodo(user, "없음2");
-    await addTodoWithDue(user, "마감3", "2026-07-02");
+    await addTodoWithDue(user, "마감3", "2026-07-02T00:00");
     await screen.findByText("마감3");
 
     await user.click(screen.getByRole("radio", { name: "마감일순" }));

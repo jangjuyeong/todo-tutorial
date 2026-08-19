@@ -114,6 +114,45 @@ describe("TodoItem", () => {
     expect(screen.queryByText("2026-07-01")).not.toBeInTheDocument();
   });
 
+  it("마감일에 시간이 포함되어 있으면 'T'를 공백으로 바꿔 표시한다", () => {
+    render(
+      <TodoItem
+        todo={makeTodo({ dueDate: "2026-07-01T09:30" })}
+        onToggle={vi.fn()}
+        onDelete={vi.fn()}
+        onEdit={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText("2026-07-01 09:30")).toBeInTheDocument();
+  });
+
+  it("장소가 있으면 장소를 표시한다", () => {
+    render(
+      <TodoItem
+        todo={makeTodo({ location: "회의실 A" })}
+        onToggle={vi.fn()}
+        onDelete={vi.fn()}
+        onEdit={vi.fn()}
+      />
+    );
+
+    expect(screen.getByText("회의실 A")).toBeInTheDocument();
+  });
+
+  it("장소가 없으면 장소를 표시하지 않는다", () => {
+    render(
+      <TodoItem
+        todo={makeTodo()}
+        onToggle={vi.fn()}
+        onDelete={vi.fn()}
+        onEdit={vi.fn()}
+      />
+    );
+
+    expect(screen.queryByText("회의실 A")).not.toBeInTheDocument();
+  });
+
   it("카테고리가 있으면 태그를 표시한다", () => {
     render(
       <TodoItem

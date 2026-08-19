@@ -47,6 +47,7 @@ describe("TodoInput 우선순위 선택", () => {
       "장보기",
       "low",
       undefined,
+      undefined,
       undefined
     );
   });
@@ -68,14 +69,14 @@ describe("TodoInput 우선순위 선택", () => {
   });
 });
 
-describe("TodoInput 마감일", () => {
-  it("마감일을 입력하면 onAdd에 마감일이 함께 전달된다", async () => {
+describe("TodoInput 마감일시", () => {
+  it("마감일시를 입력하면 onAdd에 마감일시가 함께 전달된다", async () => {
     const user = userEvent.setup();
     const onAdd = vi.fn();
     render(<TodoInput onAdd={onAdd} />);
 
-    fireEvent.change(screen.getByLabelText("마감일"), {
-      target: { value: "2026-07-01" },
+    fireEvent.change(screen.getByLabelText("마감일시"), {
+      target: { value: "2026-07-01T09:30" },
     });
     await user.type(
       screen.getByRole("textbox", { name: "새 할 일" }),
@@ -85,12 +86,13 @@ describe("TodoInput 마감일", () => {
     expect(onAdd).toHaveBeenCalledExactlyOnceWith(
       "회의",
       "medium",
-      "2026-07-01",
+      "2026-07-01T09:30",
+      undefined,
       undefined
     );
   });
 
-  it("마감일을 비워두면 마감일 없이 onAdd를 호출한다", async () => {
+  it("마감일시를 비워두면 마감일시 없이 onAdd를 호출한다", async () => {
     const user = userEvent.setup();
     const onAdd = vi.fn();
     render(<TodoInput onAdd={onAdd} />);
@@ -104,22 +106,78 @@ describe("TodoInput 마감일", () => {
       "회의",
       "medium",
       undefined,
+      undefined,
       undefined
     );
   });
 
-  it("제출 후 마감일 입력이 초기화된다", async () => {
+  it("제출 후 마감일시 입력이 초기화된다", async () => {
     const user = userEvent.setup();
     render(<TodoInput onAdd={vi.fn()} />);
 
-    const dueInput = screen.getByLabelText("마감일") as HTMLInputElement;
-    fireEvent.change(dueInput, { target: { value: "2026-07-01" } });
+    const dueInput = screen.getByLabelText("마감일시") as HTMLInputElement;
+    fireEvent.change(dueInput, { target: { value: "2026-07-01T09:30" } });
     await user.type(
       screen.getByRole("textbox", { name: "새 할 일" }),
       "회의{Enter}"
     );
 
     expect(dueInput.value).toBe("");
+  });
+});
+
+describe("TodoInput 장소", () => {
+  it("장소를 입력하면 onAdd에 장소가 함께 전달된다", async () => {
+    const user = userEvent.setup();
+    const onAdd = vi.fn();
+    render(<TodoInput onAdd={onAdd} />);
+
+    await user.type(screen.getByLabelText("장소"), "회의실 A");
+    await user.type(
+      screen.getByRole("textbox", { name: "새 할 일" }),
+      "회의{Enter}"
+    );
+
+    expect(onAdd).toHaveBeenCalledExactlyOnceWith(
+      "회의",
+      "medium",
+      undefined,
+      undefined,
+      "회의실 A"
+    );
+  });
+
+  it("장소를 비워두면 장소 없이 onAdd를 호출한다", async () => {
+    const user = userEvent.setup();
+    const onAdd = vi.fn();
+    render(<TodoInput onAdd={onAdd} />);
+
+    await user.type(
+      screen.getByRole("textbox", { name: "새 할 일" }),
+      "회의{Enter}"
+    );
+
+    expect(onAdd).toHaveBeenCalledExactlyOnceWith(
+      "회의",
+      "medium",
+      undefined,
+      undefined,
+      undefined
+    );
+  });
+
+  it("제출 후 장소 입력이 초기화된다", async () => {
+    const user = userEvent.setup();
+    render(<TodoInput onAdd={vi.fn()} />);
+
+    const locationInput = screen.getByLabelText("장소") as HTMLInputElement;
+    await user.type(locationInput, "회의실 A");
+    await user.type(
+      screen.getByRole("textbox", { name: "새 할 일" }),
+      "회의{Enter}"
+    );
+
+    expect(locationInput.value).toBe("");
   });
 });
 
@@ -148,7 +206,8 @@ describe("TodoInput 카테고리 선택", () => {
       "보고서",
       "medium",
       undefined,
-      "work"
+      "work",
+      undefined
     );
   });
 
@@ -165,6 +224,7 @@ describe("TodoInput 카테고리 선택", () => {
     expect(onAdd).toHaveBeenCalledExactlyOnceWith(
       "청소",
       "medium",
+      undefined,
       undefined,
       undefined
     );

@@ -7,10 +7,12 @@ export interface Todo {
   priority: Priority;
   /** 생성 시각(ms). 생성일순 정렬에 사용한다. */
   createdAt: number;
-  /** 마감일 "YYYY-MM-DD". 지정하지 않으면 undefined. */
+  /** 마감일시 "YYYY-MM-DDTHH:mm"(datetime-local 형식). 지정하지 않으면 undefined. */
   dueDate?: string;
   /** 카테고리 태그. 지정하지 않으면 undefined. */
   category?: Category;
+  /** 장소. 지정하지 않으면 undefined. */
+  location?: string;
 }
 
 export const DEFAULT_PRIORITY: Priority = "medium";

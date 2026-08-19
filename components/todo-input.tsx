@@ -23,7 +23,8 @@ interface TodoInputProps {
     text: string,
     priority: Priority,
     dueDate?: string,
-    category?: Category
+    category?: Category,
+    location?: string
   ) => void;
 }
 
@@ -32,16 +33,18 @@ export function TodoInput({ onAdd }: TodoInputProps) {
   const [priority, setPriority] = useState<Priority>(DEFAULT_PRIORITY);
   const [dueDate, setDueDate] = useState("");
   const [category, setCategory] = useState<Category | undefined>(undefined);
+  const [location, setLocation] = useState("");
 
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
-    // 빈/공백 입력이면 추가하지 않고 선택값(우선순위·마감일·카테고리)도 유지한다.
+    // 빈/공백 입력이면 추가하지 않고 선택값(우선순위·마감일시·카테고리·장소)도 유지한다.
     if (!value.trim()) return;
-    onAdd(value, priority, dueDate || undefined, category);
+    onAdd(value, priority, dueDate || undefined, category, location || undefined);
     setValue("");
     setPriority(DEFAULT_PRIORITY);
     setDueDate("");
     setCategory(undefined);
+    setLocation("");
   }
 
   return (
@@ -60,11 +63,18 @@ export function TodoInput({ onAdd }: TodoInputProps) {
           />
 
           <Input
-            type="date"
+            type="datetime-local"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
-            aria-label="마감일"
+            aria-label="마감일시"
             className="w-auto"
+          />
+
+          <Input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="장소 (선택)"
+            aria-label="장소"
           />
 
           <div role="radiogroup" aria-label="우선순위" className="flex gap-1">
